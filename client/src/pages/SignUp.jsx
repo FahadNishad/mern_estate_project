@@ -16,11 +16,12 @@ const SignUp = () => {
       [e.target.id]: e.target.value,
     });
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const res = await fetch('/api/auth/signup', {
+      dispatch(signInStart());
+      const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,19 +30,19 @@ const SignUp = () => {
       });
       const data = await res.json();
       console.log(data);
+  
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
-      navigate('/sign-in');
+  
+      dispatch(signInSuccess(data));
+      navigate('/');
     } catch (error) {
-      setLoading(false);
-      setError(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
+  
   console.log(formData)
   return (
     <div className='p-3 max-w-lg mx-auto'>
