@@ -18,6 +18,8 @@ import {
   updateUserStart,
   updateUserSuccess,
 } from "../redux/user/userSlice";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const fileRef = useRef(null);
@@ -99,7 +101,7 @@ const Profile = () => {
         method: "DELETE",
       });
       const data = await res.json();
-      if (data.success == false) {
+      if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
       }
@@ -109,27 +111,38 @@ const Profile = () => {
     }
   };
 
-  const handleSignOut = async () =>{
+  const confirmDeleteUser = () => {
+    confirmAlert({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete your account?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: handleDeleteUser,
+        },
+        {
+          label: 'No',
+          onClick: () => {}, // Do nothing if the user clicks "No"
+        },
+      ],
+    });
+  };
+
+  const handleSignOut = async () => {
     try {
       dispatch(signOUtUserStart());
-      const res = await fetch('api/auth/signout');
+      const res = await fetch("api/auth/signout");
       const data = await res.json();
-      if(data.success == false)
-      {
+      if (data.success == false) {
         dispatch(signOUtUserFailure(data.message));
         return;
       }
 
-      dispatch(signOUtUserSuccess(data))
-      
+      dispatch(signOUtUserSuccess(data));
     } catch (error) {
-
-      dispatch(signOUtUserFailure(data.message))
-
-
-      
+      dispatch(signOUtUserFailure(data.message));
     }
-  }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -194,11 +207,8 @@ const Profile = () => {
       </form>
 
       <div className="flex justify-between m-5">
-        <span
-          className="text-red-700 cursor-pointer"
-          onClick={handleDeleteUser}
-        >
-          Deleet account{" "}
+        <span className="text-red-700 cursor-pointer" onClick={confirmDeleteUser}>
+          Delete account
         </span>
         <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
           Sign Out
