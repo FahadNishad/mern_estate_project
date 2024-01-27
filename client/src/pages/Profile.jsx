@@ -18,9 +18,9 @@ import {
   updateUserStart,
   updateUserSuccess,
 } from "../redux/user/userSlice";
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css'; 
-import {Link} from 'react-router-dom'
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -30,6 +30,9 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListingsError, setShowListingError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch();
 
   // console.log(file)
@@ -115,15 +118,15 @@ const Profile = () => {
 
   const confirmDeleteUser = () => {
     confirmAlert({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete your account?',
+      title: "Confirm Deletion",
+      message: "Are you sure you want to delete your account?",
       buttons: [
         {
-          label: 'Yes',
+          label: "Yes",
           onClick: handleDeleteUser,
         },
         {
-          label: 'No',
+          label: "No",
           onClick: () => {}, // Do nothing if the user clicks "No"
         },
       ],
@@ -143,6 +146,27 @@ const Profile = () => {
       dispatch(signOUtUserSuccess(data));
     } catch (error) {
       dispatch(signOUtUserFailure(data.message));
+    }
+  };
+
+  const hanldeShowListing = async (e) => {
+    try {
+      setShowListingError(false);
+      setIsLoading(true);
+      const res = await fetch(`api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingError(true);
+        setIsLoading(false);
+        return;
+      }
+
+      setUserListings(data);
+    } catch (error) {
+      setShowListingError(true);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -206,13 +230,19 @@ const Profile = () => {
         >
           {loading ? "Loading..." : "Update"}
         </button>
-        <Link  className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:op95" to={"/create-listing"}>
-          Create Listing 
+        <Link
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:op95"
+          to={"/create-listing"}
+        >
+          Create Listing
         </Link>
       </form>
 
       <div className="flex justify-between m-5">
-        <span className="text-red-700 cursor-pointer" onClick={confirmDeleteUser}>
+        <span
+          className="text-red-700 cursor-pointer"
+          onClick={confirmDeleteUser}
+        >
           Delete account
         </span>
         <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
@@ -223,6 +253,45 @@ const Profile = () => {
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
+      <button onClick={hanldeShowListing} className="text-green-700 w-full">
+        Show Listings
+      </button>
+      <p className="text-red-700 mt-5">
+        {showListingsError ? "Error Show Listings" : ""}
+      </p>
+      {isLoading && <p className="text-green-700 text-center font-semibold">Loading...</p>}
+      {userListings && userListings.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mt-7 text-3xl font-semibold">
+            Your Lisitngs
+          </h1>
+          {userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt="listing cover"
+                  className="h-16 w-16 object-contain rounded-lg"
+                />
+              </Link>
+              <Link
+                to={`/listings/${listing._id}`}
+                className=" text-slate-700 font-semibold hover:underline truncate flex-1 "
+              >
+                <p className="">{listing.name}</p>
+              </Link>
+
+              <div className="flex flex-col items-center gap-2">
+                <button className="text-white uppercase bg-red-700 p-2 rounded-lg w-full hover:opacity-95">Delete</button>
+                <button className="text-white uppercase bg-green-700 p-2 rounded-lg w-full hover:opacity-95">Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
