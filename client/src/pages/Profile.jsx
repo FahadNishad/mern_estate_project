@@ -34,6 +34,7 @@ const Profile = () => {
   const [userListings, setUserListings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  
 
   // console.log(file)
   // console.log(filePerc)
@@ -168,24 +169,23 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
-  const handleListingDelete = async (listingId) =>{
+  const handleListingDelete = async (listingId) => {
     try {
-
-      const res = await fetch(`/api/listing/delete/${listingId}`,{
-        method:'DELETE',
-
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
       });
       const data = await res.json();
-      if(data.success === false)
-      {
-        console.log(data.message)
-        return
-      } 
-      setUserListings((prev)=>prev.filter((listing)=>listing._id !== listingId))  
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
     }
-  }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -248,29 +248,28 @@ const Profile = () => {
           {loading ? "Loading..." : "Update"}
         </button>
         <Link
-          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:op95"
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
           to={"/create-listing"}
         >
           Create Listing
         </Link>
       </form>
 
-      <div className="flex justify-between m-5">
-        <span
-          className="text-red-700 cursor-pointer"
+        <button
+          className="bg-red-700 p-3 text-white rounded-lg cursor-pointer text-center uppercase w-full hover:opacity-95 mt-5"
           onClick={confirmDeleteUser}
         >
           Delete account
-        </span>
-        <span className="text-red-700 cursor-pointer" onClick={handleSignOut}>
+        </button>
+        <button className="bg-slate-900 font-semibold p-3 text-white rounded-lg uppercase cursor-pointer  text-center w-full mt-5" onClick={handleSignOut}>
           Sign Out
-        </span>
-      </div>
+        </button>
+      
       {/* <p className='text-red-700 mt-5'>{error ? error : ''}</p> */}
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
-      <button onClick={hanldeShowListing} className="text-green-700 w-full">
+      <button onClick={hanldeShowListing} className="bg-blue-900 w-full text-white p-3 rounded-lg uppercase hover:opacity-95">
         Show Listings
       </button>
       <p className="text-red-700 mt-5">
@@ -304,15 +303,18 @@ const Profile = () => {
               </Link>
 
               <div className="flex flex-col items-center gap-2">
-                <button onClick={()=>handleListingDelete(listing._id)} className="text-white
-                 uppercase bg-red-700 p-2 rounded-lg w-full hover:opacity-95">
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className="text-white
+                 uppercase bg-red-700 p-2 rounded-lg w-full hover:opacity-95"
+                >
                   Delete
                 </button>
 
                 <Link to={`/update-listing/${listing._id}`}>
-                <button className="text-white uppercase bg-green-700 p-2 rounded-lg w-full hover:opacity-95">
-                  Edit
-                </button>
+                  <button className="text-white uppercase bg-green-700 p-2 rounded-lg w-full hover:opacity-95">
+                    Edit
+                  </button>
                 </Link>
               </div>
             </div>
