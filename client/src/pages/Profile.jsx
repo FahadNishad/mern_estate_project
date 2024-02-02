@@ -239,34 +239,36 @@ const Profile = () => {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
-        
 
-        <button
-          disabled={loading}
-          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
-        >
-          {loading ? "Loading..." : "Update"}
-        </button>
-        <Link
-          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
-          to={"/create-listing"}
-        >
-          Create Listing
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            disabled={loading}
+            className="border-[2px] border-slate-700 text-black rounded-lg p-3 uppercase hover:bg-slate-400 transition-colors duration-500 disabled:opacity-80 flex-1"
+          >
+            {loading ? "Loading..." : "Update"}
+          </button>
+          <Link
+            className="border-[2px] border-slate-700 text-black rounded-lg p-3 uppercase hover:bg-slate-400 transition-colors duration-500 disabled:opacity-80 flex-1 text-center"
+            to={"/create-listing"}
+          >
+            Create Listing
+          </Link>
+        </div>
       </form>
-
-      <button
-        className="bg-red-700 p-3 text-white rounded-lg cursor-pointer text-center uppercase w-full hover:opacity-95 mt-5"
-        onClick={confirmDeleteUser}
-      >
-        Delete account
-      </button>
-      <button
-        className="bg-slate-900 font-semibold p-3 text-white rounded-lg uppercase cursor-pointer  text-center w-full mt-5"
-        onClick={handleSignOut}
-      >
-        Sign Out
-      </button>
+      <div className="flex items-center gap-2 mt-5">
+        <button
+          className=" flex-1 border-[2px] border-slate-700 p-3 text-black rounded-lg cursor-pointer text-center uppercase hover:bg-slate-400 transition-colors duration-500 disabled:opacity-80"
+          onClick={confirmDeleteUser}
+        >
+          Delete account
+        </button>
+        <button
+          className="flex-1 border-[2px] border-slate-700 p-3 text-black rounded-lg cursor-pointer text-center uppercase hover:bg-slate-400 transition-colors duration-500 disabled:opacity-80 "
+          onClick={handleSignOut}
+        >
+          Sign Out
+        </button>
+      </div>
 
       {/* <p className='text-red-700 mt-5'>{error ? error : ''}</p> */}
       <p className="text-green-700 mt-5">
@@ -274,7 +276,8 @@ const Profile = () => {
       </p>
       <button
         onClick={hanldeShowListing}
-        className="bg-blue-900 w-full text-white p-3 rounded-lg uppercase hover:opacity-95"
+        className="border-[2px] border-slate-700 w-full text-black p-3 
+        rounded-lg uppercase hover:bg-slate-400 transition-colors duration-500"
       >
         Show Listings
       </button>
