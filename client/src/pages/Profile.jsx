@@ -34,7 +34,6 @@ const Profile = () => {
   const [userListings, setUserListings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  
 
   // console.log(file)
   // console.log(filePerc)
@@ -240,6 +239,7 @@ const Profile = () => {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
+        
 
         <button
           disabled={loading}
@@ -255,21 +255,27 @@ const Profile = () => {
         </Link>
       </form>
 
-        <button
-          className="bg-red-700 p-3 text-white rounded-lg cursor-pointer text-center uppercase w-full hover:opacity-95 mt-5"
-          onClick={confirmDeleteUser}
-        >
-          Delete account
-        </button>
-        <button className="bg-slate-900 font-semibold p-3 text-white rounded-lg uppercase cursor-pointer  text-center w-full mt-5" onClick={handleSignOut}>
-          Sign Out
-        </button>
-      
+      <button
+        className="bg-red-700 p-3 text-white rounded-lg cursor-pointer text-center uppercase w-full hover:opacity-95 mt-5"
+        onClick={confirmDeleteUser}
+      >
+        Delete account
+      </button>
+      <button
+        className="bg-slate-900 font-semibold p-3 text-white rounded-lg uppercase cursor-pointer  text-center w-full mt-5"
+        onClick={handleSignOut}
+      >
+        Sign Out
+      </button>
+
       {/* <p className='text-red-700 mt-5'>{error ? error : ''}</p> */}
       <p className="text-green-700 mt-5">
         {updateSuccess ? "User is updated successfully!" : ""}
       </p>
-      <button onClick={hanldeShowListing} className="bg-blue-900 w-full text-white p-3 rounded-lg uppercase hover:opacity-95">
+      <button
+        onClick={hanldeShowListing}
+        className="bg-blue-900 w-full text-white p-3 rounded-lg uppercase hover:opacity-95"
+      >
         Show Listings
       </button>
       <p className="text-red-700 mt-5">
